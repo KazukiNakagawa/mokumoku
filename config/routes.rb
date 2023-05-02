@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   post 'signup', to: 'users#create'
   resources :users, only: %i[new create]
   resources :profiles, only: [:show] 
+  resources :relationships, only: [:create, :destroy]
   resources :events do
     collection do
       get :future
@@ -42,4 +43,5 @@ Rails.application.routes.draw do
       resources :events, only: %i[index]
     end
   end
+
 end
