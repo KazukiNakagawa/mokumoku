@@ -4,15 +4,14 @@
     <h3 class="mb-0">プロフィール</h3>
     <% unless current_user == @user %>
       <% if current_user.following?(@user) %>
-        <%- relationship = current_user.relationships.find_by(follow_id: @user.id) %>
-        <%= form_for(relationship , html: { method: :delete }) do |f| %>
+        <%= form_with(model: @relationship, url: relationship_path(@relationship), html: { method: :delete }) do |f| %>
           <%= f.hidden_field :follow_id %>
-          <%= link_to 'フォローを外す', "#", onclick: "document.querySelector('#edit_relationship_#{relationship.id}').submit()", class: 'btn btn-danger btn-block'  %>
+          <%= link_to 'フォローを外す', "#", onclick: "this.closest('form').submit();return false;", class: 'btn btn-danger btn-block' %>
         <% end %>
       <% else %>
-        <%= form_for(current_user.relationships.build) do |f| %>
-          <%= f.hidden_field :follow_id, value: @user.id %>
-          <%= link_to 'フォローする', "#", onclick: "document.querySelector('#new_relationship').submit()", class: 'btn btn-primary btn-block'  %>
+        <%= form_with(model: current_user.relationships.build(follow_id: @user.id), html: { id: "new_relationship_#{current_user.id}" }) do |f| %>
+          <%= f.hidden_field :follow_id %>
+          <%= link_to 'フォローする', "#", onclick: "this.closest('form').submit();return false;", class: 'btn btn-primary btn-block' %>
         <% end %>
       <% end %>
     <% end %>
